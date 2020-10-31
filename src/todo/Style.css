@@ -1,0 +1,33 @@
+:root{
+    --ion-background-color: #1C3334;
+    --ion-text-color: #fff;
+    --ion-font-family: Constantia;
+    text-align: center;
+}
+
+.title{
+    font-size: 20px;
+}
+
+.saveButton{
+    width: 40px;
+    height: 40px;
+}
+
+.list{
+    justify-content: center;
+    display: flex!important;
+    align-items: center!important;
+    flex-direction: column;
+    width: 100%;
+}
+
+.content{
+    border: 1px solid #f1f1f1 !important;
+    text-align: left;
+    margin: 0;
+}
+
+
+
+
