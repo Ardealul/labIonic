@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import { ProductEdit, ProductList } from './todo';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,15 +22,20 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import {ProductProvider} from "./todo/ProductProvider";
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
+      <ProductProvider>
+        <IonReactRouter>
+        <IonRouterOutlet>
+            <Route path="/products" component={ProductList} exact={true} />
+            <Route path="/product" component={ProductEdit} exact={true} />
+            <Route path="/product/:id" component={ProductEdit} exact={true} />
+            <Route exact path="/" render={() => <Redirect to="/products" />} />
+        </IonRouterOutlet>
+        </IonReactRouter>
+    </ProductProvider>
   </IonApp>
 );
 
