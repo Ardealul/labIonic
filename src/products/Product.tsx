@@ -14,4 +14,4 @@ const Product: React.FC<ProductPropsExt> = ({id, name, description, price, onEdi
     );
 };
 
-export default Product
+export default Product;

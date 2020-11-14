@@ -22,8 +22,8 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
     const { products, fetching, fetchingError } = useContext(ProductContext);
     log('render');
     return (
-        <IonPage className={"page"}>
-            <IonHeader className={"header"}>
+        <IonPage>
+            <IonHeader>
                 <IonToolbar>
                     <IonTitle className={"title"}>PRODUCT LIST</IonTitle>
                 </IonToolbar>

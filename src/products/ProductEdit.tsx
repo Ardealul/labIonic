@@ -46,10 +46,10 @@ const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
     };
     log('render');
     return (
-        <IonPage className={"page"}>
-            <IonHeader className={"header"}>
+        <IonPage>
+            <IonHeader>
                 <IonToolbar>
-                    <IonTitle>EDIT</IonTitle>
+                    <IonTitle className={"title"}>EDIT</IonTitle>
                     <IonButtons slot="end">
                         <IonButton onClick={handleSave}>
                             <IonImg className={"saveButton"} src={require('../icons/save-file.png')}/>
