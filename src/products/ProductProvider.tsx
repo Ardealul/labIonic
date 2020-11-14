@@ -87,7 +87,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         fetchProducts();
         return () => {
             canceled = true;
-            //todo: destroy something
+            //products: destroy something
         }
 
         async function fetchProducts() {
