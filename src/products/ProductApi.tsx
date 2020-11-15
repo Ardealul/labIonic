@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getLogger, withLogs, authConfig, baseUrl } from '../core';
 import {ProductProps} from "./ProductProps";
 
-const productUrl = `http://${baseUrl}/product`;
+const productUrl = `http://${baseUrl}/api/product`;
 
 export const getProducts: (token: string) => Promise<ProductProps[]> = token => {
     return withLogs(axios.get(productUrl, authConfig(token)), 'getProducts');
@@ -13,11 +13,11 @@ export const createProduct: (token: string, product: ProductProps) => Promise<Pr
 }
 
 export const updateProduct: (token: string, product: ProductProps) => Promise<ProductProps[]> = (token, product) => {
-    return withLogs(axios.put(`${productUrl}/${product.id}`, product, authConfig(token)), 'updateProduct');
+    return withLogs(axios.put(`${productUrl}/${product._id}`, product, authConfig(token)), 'updateProduct');
 }
 
 interface MessageData{
-    event: string;
+    type: string;
     payload: ProductProps;
 }
 

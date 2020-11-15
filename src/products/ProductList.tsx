@@ -32,8 +32,8 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                 <IonLoading isOpen={fetching} message="Fetching products" />
                 {products && (
                     <IonList lines={"none"} className={"list"}>
-                        {products.map(({ id, name, description, price}) =>
-                            <Product key={id} id={id} name={name} description={description} price={price} onEdit={id => history.push(`/product/${id}`)} />)}
+                        {products.map(({ _id, name, description, price}) =>
+                            <Product key={_id} _id={_id} name={name} description={description} price={price} onEdit={id => history.push(`/product/${id}`)} />)}
                     </IonList>
                 )}
                 {fetchingError && (

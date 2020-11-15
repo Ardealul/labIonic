@@ -25,6 +25,8 @@ interface ProductEditProps extends RouteComponentProps<{
 
 const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
     const { products, saving, savingError, saveProduct } = useContext(ProductContext);
+    log("PRODUCT EDIT")
+    log(products);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
@@ -32,12 +34,12 @@ const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
     useEffect(() => {
         log('useEffect');
         const routeId = match.params.id || '';
-        const product = products?.find(prod => prod.id === routeId);
+        const product = products?.find(prod => prod._id === routeId);
         setProduct(product);
         if (product) {
             setName(product.name);
-            setDescription(product.description)
-            setPrice(product.price)
+            setDescription(product.description);
+            setPrice(product.price);
         }
     }, [match.params.id, products]);
     const handleSave = () => {
@@ -72,12 +74,6 @@ const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
                         <IonCol><IonInput value={price} placeholder={"ex: 10"} onIonChange={e => setPrice(e.detail.value || '')} /></IonCol>
                     </IonRow>
                 </IonGrid>
-                {/*<IonLabel>Name: </IonLabel>*/}
-                {/*<IonInput value={name} placeholder={"ex: Pepsi"} onIonChange={e => setName(e.detail.value || '')} />*/}
-                {/*<IonLabel>Description: </IonLabel>*/}
-                {/*<IonInput value={description} placeholder={"ex: suc"} onIonChange={e => setDescription(e.detail.value || '')} />*/}
-                {/*<IonLabel>Price: </IonLabel>*/}
-                {/*<IonInput value={price} placeholder={"ex: 10"} onIonChange={e => setPrice(e.detail.value || '')} />*/}
                 <IonLoading isOpen={saving} />
                 {savingError && (
                     <div>{savingError.message || 'Failed to save product'}</div>
