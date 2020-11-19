@@ -5,7 +5,7 @@ import {ProductProps} from "./ProductProps";
 const productUrl = `http://${baseUrl}/api/product`;
 
 export const getProducts: (token: string) => Promise<ProductProps[]> = token => {
-    return withLogs(axios.get(productUrl, authConfig(token)), 'getProducts');
+    return withLogs(axios.get(productUrl, authConfig(token)), 'getProducts'); //Storage.set()
 }
 
 export const createProduct: (token: string, product: ProductProps) => Promise<ProductProps[]> = (token, product) => {

@@ -1,20 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
+import '../products/Style.css'
 import {
-    IonButton, IonCol,
-    IonContent,
-    IonGrid,
-    IonHeader,
-    IonInput, IonLabel,
-    IonLoading,
-    IonPage, IonRow,
-    IonTitle,
-    IonToolbar
+    IonButton, IonCol, IonContent, IonGrid, IonHeader, IonInput, IonLabel, IonLoading, IonPage, IonRow, IonTitle, IonToolbar
 } from '@ionic/react';
 import { AuthContext } from './AuthProvider';
 import { getLogger } from '../core';
-import '../products/Style.css'
+
 
 const log = getLogger('Login');
 
@@ -47,14 +40,14 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
                     <IonRow>
                         <IonCol><IonLabel>Username: </IonLabel></IonCol>
                         <IonCol>
-                            <IonInput placeholder="ex: myUsername123" value={username}
+                            <IonInput placeholder="username" value={username}
                                       onIonChange={e => setState({...state, username: e.detail.value || ''})}/>
                         </IonCol>
                     </IonRow>
                     <IonRow>
                         <IonCol><IonLabel>Password: </IonLabel></IonCol>
                         <IonCol>
-                            <IonInput placeholder="ex: myPassword123" value={password}
+                            <IonInput placeholder="password" value={password}
                                       onIonChange={e => setState({...state, password: e.detail.value || ''})}/>
                         </IonCol>
                     </IonRow>
@@ -63,7 +56,7 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
                 {authenticationError && (
                     <div>{authenticationError.message || 'Failed to authenticate'}</div>
                 )}
-                <IonButton onClick={handleLogin}>Login</IonButton>
+                <IonButton shape="round" onClick={handleLogin}>Login</IonButton>
             </IonContent>
         </IonPage>
     );

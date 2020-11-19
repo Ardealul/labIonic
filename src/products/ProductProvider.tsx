@@ -136,7 +136,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                 const { type, payload: product } = message;
                 log(`ws message, product ${type}`);
                 if (type === 'created' || type === 'updated') {
-                    //dispatch({type: SAVE_PRODUCT_SUCCEEDED, payload: {product} });
+                    dispatch({type: SAVE_PRODUCT_SUCCEEDED, payload: {product} });
                 }
             });
             return () => {

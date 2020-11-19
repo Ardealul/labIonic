@@ -28,6 +28,40 @@
     margin: 0;
 }
 
+.card{
+    width: 320px;
+    height: 100px;
+    border-radius: 10px;
+    box-shadow: -1px 3px 5px 0 rgba(0,0,0,0.75);
+    overflow: visible;
+}
 
+.productName{
+    font-size: 20px;
+    font-family: "Bodoni MT";
+    color: white;
+}
 
+.productPrice{
+    font-size: 14px;
+    font-family: Helvetica;
+    color: white;
+}
+
+.productDescription{
+    font-size: 15px;
+    color: dodgerblue;
+}
+
+.sc-ion-alert-md{
+    color: #ffffff;
+}
+
+.alert-radio-group .sc-ion-alert-md{
+    color: #ffffff;
+}
+
+.select-interface-option .md .alert-radio-button .alert-tappable .alert-radio .sc-ion-alert-md{
+    color: #ffffff;
+}
 

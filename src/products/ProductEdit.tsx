@@ -1,15 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    IonLabel,
-    IonButton,
-    IonButtons,
-    IonContent,
-    IonHeader, IonImg,
-    IonInput,
-    IonLoading,
-    IonPage,
-    IonTitle,
-    IonToolbar, IonGrid, IonRow, IonCol
+    IonLabel, IonButton, IonButtons, IonContent, IonHeader, IonImg, IonInput, IonLoading, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol
 } from '@ionic/react';
 import { getLogger } from '../core';
 import { ProductContext } from './ProductProvider';
