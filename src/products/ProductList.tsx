@@ -9,6 +9,7 @@ import { ProductContext } from './ProductProvider';
 import { AuthContext } from "../auth";
 import './Style.css'
 import {ProductProps} from "./ProductProps";
+import { useNetwork } from "../utils/useNetwork";
 
 const log = getLogger('ProductList');
 
@@ -17,6 +18,8 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
 
     const [disableInfiniteScroll, setDisableInfiniteScroll] = useState<boolean>(false);
     const [pos, setPos] = useState(5);
+
+    //const { networkStatus } = useNetwork();
 
     const [filter, setFilter] = useState<string | undefined>("any price");
     const selectOptions = ["< 10 RON", ">= 10 RON", "any price"];
@@ -93,6 +96,9 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                         ))}
                     </IonSelect>
                 </IonItem>
+                {/*<div>*/}
+                {/*    Network is {networkStatus.connected ? "online" : "offline"}*/}
+                {/*</div>*/}
             </IonHeader>
             <IonContent className={"content"}>
                 <IonLoading isOpen={fetching} message="Fetching products" />

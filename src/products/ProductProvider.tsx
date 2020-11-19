@@ -1,9 +1,14 @@
 import React, {useCallback, useContext, useEffect, useReducer} from 'react';
 import PropTypes from 'prop-types';
-import { getLogger } from '../core';
+import {getLogger, withLogs} from '../core';
 import { ProductProps } from './ProductProps';
 import { createProduct, getProducts, newWebSocket, updateProduct } from './ProductApi';
 import {AuthContext} from "../auth";
+
+import { Plugins } from "@capacitor/core";
+import Product from "./Product";
+import {key} from "ionicons/icons"; //capacitor plugin
+const { Storage } = Plugins;
 
 const log = getLogger('ProductProvider');
 
@@ -103,13 +108,45 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                 log('fetchProducts started');
                 dispatch({ type: FETCH_PRODUCTS_STARTED });
                 const products = await getProducts(token);
+                log(products);
                 log('fetchProducts succeeded');
                 if (!canceled) {
                     dispatch({ type: FETCH_PRODUCTS_SUCCEEDED, payload: { products } });
                 }
             } catch (error) {
                 log('fetchProducts failed');
-                dispatch({ type: FETCH_PRODUCTS_FAILED, payload: { error } });
+                //dispatch({ type: FETCH_PRODUCTS_FAILED, payload: { error } });
+
+                let realKeys: string[] = [];
+                await Storage.keys().then((keys) => {
+                   return keys.keys.forEach(function (value){
+                       if(value != "user")
+                        realKeys.push(value);
+                   });
+                });
+                //console.log(realKeys);
+
+                let values: string[] = [];
+                for (const key1 of realKeys) {
+                    await Storage.get({key: key1}).then((value)=>{
+                        // @ts-ignore
+                        values.push(value.value);
+                    })
+                }
+                //console.log(values);
+
+                const products: ProductProps[] = [];
+                for(const value of values){
+                    var product = JSON.parse(value);
+                    //console.log(product);
+                    products.push(product);
+                }
+
+                console.log(products);
+
+                if (!canceled) {
+                    dispatch({ type: FETCH_PRODUCTS_SUCCEEDED, payload: { products } });
+                }
             }
         }
     }
@@ -132,7 +169,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         log('wsEffect - connecting');
         let closeWebSocket: () => void;
         if(token?.trim()) {
-            closeWebSocket = newWebSocket(token,message => {
+            closeWebSocket = newWebSocket(token,(message) => {
                 if (canceled) {
                     return;
                 }
@@ -145,7 +182,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
             return () => {
                 log('wsEffect - disconnecting');
                 canceled = true;
-                closeWebSocket();
+                closeWebSocket?.();
             }
         }
     }
