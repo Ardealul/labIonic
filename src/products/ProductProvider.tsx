@@ -49,13 +49,15 @@ const reducer: (state: ProductsState, action: ActionProps) => ProductsState =
             case SAVE_PRODUCT_SUCCEEDED:
                 const products = [...(state.products || [])];
                 const product = payload.product;
-                const index = products.findIndex(prod => prod._id === product._id);
-                if (index === -1) {
-                    products.splice(0, 0, product);
-                } else {
-                    products[index] = product;
+                if (product._id !== undefined) {
+                    const index = products.findIndex(prod => prod._id === product._id);
+                    if (index === -1) {
+                        products.splice(0, 0, product);
+                    } else {
+                        products[index] = product;
+                    }
+                    return { ...state, products, saving: false };
                 }
-                return { ...state, products, saving: false };
             case SAVE_PRODUCT_FAILED:
                 return { ...state, savingError: payload.error, saving: false };
             default:
@@ -115,7 +117,6 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
             log('saveProduct started');
             dispatch({ type: SAVE_PRODUCT_STARTED });
             const savedProduct = await (product._id ? updateProduct(token, product) : createProduct(token, product));
-            log(savedProduct)
             log('saveProduct succeeded');
             dispatch({ type: SAVE_PRODUCT_SUCCEEDED, payload: { product: savedProduct } });
         } catch (error) {

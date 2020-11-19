@@ -41,7 +41,7 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
 
     async function searchNext($event: CustomEvent<void>) {
         if (products && pos < products.length) {
-            setProductsShow([...productsShow, ...products.slice(pos, 5 + pos)]);
+            setProductsShow([...products.slice(0, 5 + pos)]); //
             setPos(pos + 5);
         } else {
             setDisableInfiniteScroll(true);
@@ -55,7 +55,7 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
 
     useEffect(() => {
         if (products?.length) {
-            setProductsShow(products.slice(0, 5));
+            setProductsShow(products.slice(0, pos));
         }
     }, [products]);
 
@@ -91,12 +91,8 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                     <IonButton shape="round" slot="end" onClick={handleLogout}>LOGOUT</IonButton>
                     <IonTitle className={"title"}>PRODUCT LIST</IonTitle>
                 </IonToolbar>
-            </IonHeader>
-            <IonContent className={"content"}>
-                <IonLoading isOpen={fetching} message="Fetching products" />
-
-                <IonSearchbar color="white" value={searchText} debounce={500} onIonChange={(e) => setSearchText(e.detail.value!)}/>
-                <IonItem>
+                <IonSearchbar className="searchBar" color="dark" value={searchText} debounce={500} onIonChange={(e) => setSearchText(e.detail.value!)}/>
+                <IonItem className="ionItem" color="dark">
                     <IonLabel>Filter products by price</IonLabel>
                     <IonSelect value={filter} onIonChange={(e) => setFilter(e.detail.value)}>
                         {selectOptions.map((option) => (
@@ -106,8 +102,9 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                         ))}
                     </IonSelect>
                 </IonItem>
-
-
+            </IonHeader>
+            <IonContent className={"content"}>
+                <IonLoading isOpen={fetching} message="Fetching products" />
                 {/*{products && (*/}
                 {/*    <IonList lines={"none"} className={"list"}>*/}
                 {/*        {products.map(({ _id, name, description, price}) =>*/}

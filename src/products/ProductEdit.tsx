@@ -16,8 +16,6 @@ interface ProductEditProps extends RouteComponentProps<{
 
 const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
     const { products, saving, savingError, saveProduct } = useContext(ProductContext);
-    log("PRODUCT EDIT")
-    log(products);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
