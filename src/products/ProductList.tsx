@@ -1,16 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Redirect, RouteComponentProps} from 'react-router';
 import {
-    IonButton,
-    IonContent,
-    IonFab,
-    IonFabButton,
-    IonHeader,
-    IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel,
-    IonList, IonLoading,
-    IonPage, IonSearchbar, IonSelect, IonSelectOption,
-    IonTitle,
-    IonToolbar
+    IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonTitle, IonToolbar
 } from '@ionic/react';
 import Product from './Product';
 import { getLogger } from '../core';

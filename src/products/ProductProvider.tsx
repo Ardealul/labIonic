@@ -49,6 +49,8 @@ const reducer: (state: ProductsState, action: ActionProps) => ProductsState =
             case SAVE_PRODUCT_SUCCEEDED:
                 const products = [...(state.products || [])];
                 const product = payload.product;
+                log("produsul este: ")
+                log(product)
                 if (product._id !== undefined) {
                     const index = products.findIndex(prod => prod._id === product._id);
                     if (index === -1) {
