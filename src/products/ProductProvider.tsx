@@ -124,7 +124,6 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                         realKeys.push(value);
                    });
                 });
-                //console.log(realKeys);
 
                 let values: string[] = [];
                 for (const key1 of realKeys) {
@@ -133,12 +132,10 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                         values.push(value.value);
                     })
                 }
-                //console.log(values);
 
                 const products: ProductProps[] = [];
                 for(const value of values){
                     var product = JSON.parse(value);
-                    //console.log(product);
                     products.push(product);
                 }
 
