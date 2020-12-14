@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Redirect, RouteComponentProps} from 'react-router';
+import { RouteComponentProps } from "react-router";
+import { Redirect } from "react-router-dom";
 import {
     IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonTitle, IonToolbar
 } from '@ionic/react';
@@ -14,16 +15,16 @@ import { useNetwork } from "../utils/useNetwork";
 const log = getLogger('ProductList');
 
 const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
-    const { products, fetching, fetchingError } = useContext(ProductContext);
+    const { products, fetching, fetchingError, updateServer } = useContext(ProductContext);
 
     const [disableInfiniteScroll, setDisableInfiniteScroll] = useState<boolean>(false);
-    const [pos, setPos] = useState(5);
 
-    //const { networkStatus } = useNetwork();
+    const { networkStatus } = useNetwork();
 
     const [filter, setFilter] = useState<string | undefined>("any price");
-    const selectOptions = ["< 10 RON", ">= 10 RON", "any price"];
     const [searchText, setSearchText] = useState<string>("");
+    const [pos, setPos] = useState(5);
+    const selectOptions = ["< 10 RON", ">= 10 RON", "any price"];
 
     const [productsShow, setProductsShow] = useState<ProductProps[]>([]);
 
@@ -32,6 +33,8 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
         logout?.();
         return <Redirect to={{ pathname: "/login" }} />;
     };
+
+    log('render');
 
     async function searchNext($event: CustomEvent<void>) {
         if (products && pos < products.length) {
@@ -45,8 +48,14 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
         await ($event.target as HTMLIonInfiniteScrollElement).complete();
     }
 
-    log('render');
+    //update server when network status is back online
+    useEffect(() => {
+        if (networkStatus.connected === true) {
+            updateServer && updateServer();
+        }
+    }, [networkStatus.connected]);
 
+    //pagination
     useEffect(() => {
         if (products?.length) {
             setProductsShow(products.slice(0, pos));
@@ -66,7 +75,7 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                 setProductsShow(products);
             }
         }
-    }, [filter]);
+    }, [filter]); //it can depend also on products
 
     //search
     useEffect(() => {
@@ -85,6 +94,9 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                     <IonButton shape="round" slot="end" onClick={handleLogout}>LOGOUT</IonButton>
                     <IonTitle className={"title"}>PRODUCT LIST</IonTitle>
                 </IonToolbar>
+                <div className={"networkDiv"}>
+                    Network is: <b>{networkStatus.connected ? "online" : "offline"}</b>
+                </div>
                 <IonSearchbar className="searchBar" color="dark" value={searchText} debounce={500} onIonChange={(e) => setSearchText(e.detail.value!)}/>
                 <IonItem className="ionItem" color="dark">
                     <IonLabel>Filter products by price</IonLabel>
@@ -96,28 +108,27 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                         ))}
                     </IonSelect>
                 </IonItem>
-                {/*<div>*/}
-                {/*    Network is {networkStatus.connected ? "online" : "offline"}*/}
-                {/*</div>*/}
             </IonHeader>
             <IonContent className={"content"}>
                 <IonLoading isOpen={fetching} message="Fetching products" />
-                {/*{products && (*/}
-                {/*    <IonList lines={"none"} className={"list"}>*/}
-                {/*        {products.map(({ _id, name, description, price}) =>*/}
-                {/*            <Product key={_id} _id={_id} name={name} description={description} price={price} onEdit={id => history.push(`/product/${id}`)} />*/}
-                {/*            )}*/}
-                {/*    </IonList>*/}
-                {/*)}*/}
 
                 {productsShow &&
-                productsShow.map((product: ProductProps) => {
-                    return (
-                        <IonList lines={"none"} className={"list"}>
-                            <Product key={product.name} _id={product._id} name={product.name} description={product.description} price={product.price} onEdit={id => history.push(`/product/${id}`)} />
-                        </IonList>
-                    );
-                })}
+                    productsShow.map((product: ProductProps) => {
+                        return (
+                            <IonList lines={"none"} className={"list"}>
+                                <Product
+                                    key={product._id}
+                                    _id={product._id}
+                                    name={product.name}
+                                    description={product.description}
+                                    price={product.price}
+                                    status={product.status}
+                                    version={product.version}
+                                    onEdit={(id) => history.push(`/product/${id}`)} />
+                            </IonList>
+                        );
+                    })
+                }
 
                 <IonInfiniteScroll threshold="75px" disabled={disableInfiniteScroll} onIonInfinite={(e: CustomEvent<void>) => searchNext(e)}>
                     <IonInfiniteScrollContent loadingSpinner="bubbles" loadingText="Loading for more products..."/>

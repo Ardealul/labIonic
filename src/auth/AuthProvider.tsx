@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             token: "",
         });
         (async () => {
-            await Storage.remove({ key: "user" });
+            await Storage.clear();
         })();
     }
 
@@ -82,7 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         async function authenticate() {
             var tokenStorage = await Storage.get({ key: "user" });
-            console.log("user token " + tokenStorage.value);
+            console.log("user token: " + tokenStorage.value);
             if (tokenStorage.value) {
                 setState({
                     ...state,

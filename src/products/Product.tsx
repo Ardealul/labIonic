@@ -2,13 +2,7 @@ import React from 'react';
 import {ProductProps} from "./ProductProps";
 import './Style.css'
 import {
-    IonButton,
-    IonCard,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonItem,
-    IonLabel
+    IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel
 } from "@ionic/react";
 
 interface ProductPropsExt extends ProductProps{

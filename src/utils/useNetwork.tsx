@@ -10,10 +10,7 @@ const initialState = {
 export const useNetwork = () => {
     const [networkStatus, setNetworkStatus] = useState(initialState);
     useEffect(() => {
-        const handler = Network.addListener(
-            "networkStatusChange",
-            handleNetworkStatusChange
-        );
+        const handler = Network.addListener("networkStatusChange", handleNetworkStatusChange);
         Network.getStatus().then(handleNetworkStatusChange);
         let canceled = false;
         return () => {

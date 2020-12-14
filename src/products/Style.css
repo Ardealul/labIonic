@@ -27,6 +27,12 @@
     margin: 0 auto;
 }
 
+.networkDiv{
+    color: white;
+    border: 1px solid white;
+    border-radius: 12px;
+}
+
 .searchBar{
     text-align: left;
     margin: 0;
@@ -60,6 +66,14 @@
 .productDescription{
     font-size: 15px;
     color: dodgerblue;
+}
+
+.modifiedVersionTitle{
+    display: flex;
+    justify-content: center;
+    color: red;
+    font-size: 20px;
+    border-top: 1px solid white;
 }
 
 .sc-ion-alert-md{

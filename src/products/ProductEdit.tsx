@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    IonLabel, IonButton, IonButtons, IonContent, IonHeader, IonImg, IonInput, IonLoading, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol
+    IonLabel, IonButton, IonButtons, IonContent, IonHeader, IonImg, IonInput, IonLoading, IonPage,
+    IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonItem
 } from '@ionic/react';
 import { getLogger } from '../core';
+import { useNetwork } from "../utils/useNetwork";
 import { ProductContext } from './ProductProvider';
 import { RouteComponentProps } from 'react-router';
 import { ProductProps } from './ProductProps';
@@ -15,15 +17,23 @@ interface ProductEditProps extends RouteComponentProps<{
 }> {}
 
 const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
-    const { products, saving, savingError, saveProduct } = useContext(ProductContext);
+    const {
+        products,
+        saving,
+        savingError,
+        saveProduct,
+        deleteProduct,
+    } = useContext(ProductContext);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [product, setProduct] = useState<ProductProps>();
+    const [product2, setProduct2] = useState<ProductProps>();
+    const { networkStatus } = useNetwork();
+
     useEffect(() => {
-        log('useEffect');
         const routeId = match.params.id || '';
-        const product = products?.find(prod => prod._id === routeId);
+        const product = products?.find((it) => it._id === routeId);
         setProduct(product);
         if (product) {
             setName(product.name);
@@ -31,11 +41,37 @@ const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
             setPrice(product.price);
         }
     }, [match.params.id, products]);
+
+    //save button
     const handleSave = () => {
-        const editedProduct = product ? { ...product, name, description, price} : { name, description, price };
-        saveProduct && saveProduct(editedProduct).then(() => history.goBack());
+        const editedProduct = product ? {
+            ...product,
+            name,
+            description,
+            price,
+            status: 0,
+            version: product.version ? product.version + 1 : 1,
+        } : {name, description, price, status: 0, version: 1};
+        saveProduct &&
+        saveProduct(editedProduct, networkStatus.connected).then(() => history.goBack());
     };
-    log('render');
+
+    //delete button
+    const handleDelete = () => {
+        const editedProduct = product ? {...product,
+                name,
+                description,
+                price,
+                status: 0,
+                version: 0,
+            }
+            : { name, description, price, status: 0, version: 0 };
+        deleteProduct &&
+            deleteProduct(editedProduct, networkStatus.connected).then(() =>
+                history.goBack()
+            );
+    };
+
     return (
         <IonPage>
             <IonHeader>
@@ -63,6 +99,7 @@ const ProductEdit: React.FC<ProductEditProps> = ({ history, match }) => {
                         <IonCol><IonInput value={price} placeholder={"ex: 10"} onIonChange={e => setPrice(e.detail.value || '')} /></IonCol>
                     </IonRow>
                 </IonGrid>
+
                 <IonLoading isOpen={saving} />
                 {savingError && (
                     <div>{savingError.message || 'Failed to save product'}</div>

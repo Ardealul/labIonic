@@ -3,4 +3,6 @@ export interface ProductProps{
     name: string;
     description: string;
     price: string;
+    status: number;
+    version: number;
 }
