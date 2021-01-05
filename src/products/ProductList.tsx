@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import { RouteComponentProps } from "react-router";
 import { Redirect } from "react-router-dom";
 import {
-    IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonTitle, IonToolbar
+    IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSearchbar, IonSelect, IonSelectOption, IonTitle, IonToolbar, createAnimation
 } from '@ionic/react';
 import Product from './Product';
 import { getLogger } from '../core';
@@ -87,18 +87,66 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
         }
     }, [searchText]);
 
+    useEffect(simpleAnimation, []);
+    useEffect(groupAnimations, []);
+
+    //simple animation
+    function simpleAnimation() {
+        const el = document.querySelector(".fabAdd");
+        if (el) {
+            const animation = createAnimation()
+                .addElement(el)
+                .duration(1000)
+                .direction("alternate")
+                .iterations(Infinity)
+                .keyframes([
+                    {offset: 0, transform: "scale(1)", opacity: "1"},
+                    {offset: 1, transform: "scale(0.5)", opacity: "0.5"},
+                ]);
+            animation.play();
+        }
+    }
+
+    //group animations
+    function groupAnimations() {
+        const elA = document.querySelector('.networkDiv');
+        const elB = document.querySelector('.searchBar');
+        const elC = document.querySelector('.filterBar');
+        if (elA && elB && elC) {
+            const animationA = createAnimation()
+                .addElement(elA)
+                .fromTo('transform', 'scale(1)','scale(0.75)');
+
+            const animationB = createAnimation()
+                .addElement(elB)
+                .fromTo('transform', 'scale(1)', 'scale(0.75)');
+
+            const animationC = createAnimation()
+                .addElement(elC)
+                .fromTo('transform', 'scale(1)', 'scale(0.75)');
+
+            const parentAnimation = createAnimation()
+                .duration(5000)
+                .addAnimation([animationA, animationB, animationC]);
+
+            parentAnimation.play();
+        }
+    }
+
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonButton shape="round" slot="end" onClick={handleLogout}>LOGOUT</IonButton>
+                    <IonButton className={"logoutButton"} shape="round" slot="end" onClick={handleLogout}>
+                        LOGOUT
+                    </IonButton>
                     <IonTitle className={"title"}>PRODUCT LIST</IonTitle>
                 </IonToolbar>
                 <div className={"networkDiv"}>
                     Network is: <b>{networkStatus.connected ? "online" : "offline"}</b>
                 </div>
-                <IonSearchbar className="searchBar" color="dark" value={searchText} debounce={500} onIonChange={(e) => setSearchText(e.detail.value!)}/>
-                <IonItem className="ionItem" color="dark">
+                <IonSearchbar className={"searchBar"} color="dark" value={searchText} debounce={500} onIonChange={(e) => setSearchText(e.detail.value!)}/>
+                <IonItem className="ionItem filterBar" color="dark">
                     <IonLabel>Filter products by price</IonLabel>
                     <IonSelect value={filter} onIonChange={(e) => setFilter(e.detail.value)}>
                         {selectOptions.map((option) => (
@@ -124,6 +172,9 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                                     price={product.price}
                                     status={product.status}
                                     version={product.version}
+                                    photoPath={product.photoPath}
+                                    latitude={product.latitude}
+                                    longitude={product.longitude}
                                     onEdit={(id) => history.push(`/product/${id}`)} />
                             </IonList>
                         );
@@ -137,7 +188,7 @@ const ProductList: React.FC<RouteComponentProps> = ({ history }) => {
                 {fetchingError && (
                     <div>{fetchingError.message || 'Failed to fetch products'}</div>
                 )}
-                <IonFab vertical="bottom" horizontal="end" slot="fixed">
+                <IonFab className={"fabAdd"} vertical="bottom" horizontal="end" slot="fixed">
                     <IonFabButton onClick={() => history.push('/product')}>
                         {/*<IonIcon icon={add} />*/}
                         <IonImg src={require('../icons/add-to-basket.png')}/>

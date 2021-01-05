@@ -5,4 +5,7 @@ export interface ProductProps{
     price: string;
     status: number;
     version: number;
+    photoPath: string;
+    latitude: number;
+    longitude: number;
 }
